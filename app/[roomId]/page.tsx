@@ -136,7 +136,8 @@ const Room = () => {
 
   return (
     <div className="px-6 py-10 relative h-screen w-full max-w-screen-xl mx-auto">
-      <div className="w-full flex justify-end">
+      <div className="w-full flex justify-between">
+        <h1>{session.data?.user.name}'s Room</h1>
         <ModeToggle />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3">
