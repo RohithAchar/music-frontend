@@ -1,0 +1,4 @@
+NEXTAUTH_SECRET=top_secret_password
+GOOGLE_CLIENT_ID=get it from gcp
+GOOGLE_CLIENT_SECRET=get it from gcp
+YOUTUBE_API_KEY=get it from gcp
