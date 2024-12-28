@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import YouTube, { YouTubePlayer as YouTubePlayerType } from "react-youtube";
 import { Card, CardContent } from "./ui/card";
 import { Music2 } from "lucide-react";
@@ -18,6 +18,7 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
   onEnd,
 }) => {
   const playerRef = useRef<YouTubePlayerType | null>(null);
+  const [isPausedManually, setIsPausedManually] = useState(false);
 
   useEffect(() => {
     let wakeLock: WakeLockSentinel | null = null;
@@ -49,8 +50,11 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
       const player = playerRef.current;
 
       if (player && document.hidden) {
-        // Play video when tab is hidden
-        player.playVideo();
+        // Only play video if it was playing before the tab was hidden
+        const playerState = player.getPlayerState();
+        if (playerState === 1 && !isPausedManually) {
+          player.playVideo();
+        }
       }
     };
 
@@ -60,7 +64,7 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       releaseWakeLock();
     };
-  }, []);
+  }, [isPausedManually]);
 
   const opts = {
     height: "100%",
@@ -114,19 +118,14 @@ const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
               player.setVolume(100);
               player.playVideo();
             }}
-            onPlay={(event) => {
-              const player = event.target;
-              const qualities = player.getAvailableQualityLevels();
-              if (
-                qualities.length > 0 &&
-                player.getPlaybackQuality() !== qualities[0]
-              ) {
-                player.setPlaybackQuality(qualities[0]);
-              }
-            }}
+            onPlay={() => setIsPausedManually(false)}
+            onPause={() => setIsPausedManually(true)}
             onStateChange={(event) => {
+              // Handle visibility change and playback
               if (event.data === 2 && document.hidden) {
-                event.target.playVideo();
+                if (!isPausedManually) {
+                  event.target.playVideo();
+                }
               }
             }}
           />
