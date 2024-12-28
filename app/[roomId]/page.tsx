@@ -1,6 +1,7 @@
 "use client";
 
 import ActiveCardSong from "@/components/ActiveSongCard";
+import AddSongLarge from "@/components/AddSongLarge";
 import AddSong from "@/components/AddSongMobile";
 import { LoadingState } from "@/components/LoadingState";
 import SongCard from "@/components/SongCard";
@@ -134,37 +135,44 @@ const Room = () => {
   if (!socket) return <LoadingState />;
 
   return (
-    <div className="px-6 py-10 relative h-screen">
+    <div className="px-6 py-10 relative h-screen w-full max-w-screen-xl mx-auto">
       <div className="w-full flex justify-end">
         <ModeToggle />
       </div>
+      <div className="grid grid-cols-1 md:grid-cols-3">
+        <div className="col-span-2">
+          {roomId === session.data?.user.id ? (
+            <div>
+              <h1 className="text-2xl font-bold mb-4">Currently playing</h1>
+              {!activeSong?.id && <div>No song is playing</div>}
+              <YouTubePlayer songId={activeSong?.id} onEnd={onEnd} />
+            </div>
+          ) : (
+            <div>
+              <h1 className="text-2xl font-bold mb-4">Currently playing</h1>
+              <ActiveCardSong song={activeSong} />
+            </div>
+          )}
+        </div>
+        {!isMobile && <AddSongLarge addSong={addSong} />}
+      </div>
 
-      {roomId === session.data?.user.id ? (
-        <>
-          <h1 className="text-2xl font-bold mb-4">Currently playing</h1>
-          {!activeSong?.id && <div>No song is playing</div>}
-          <YouTubePlayer songId={activeSong?.id} onEnd={onEnd} />
-        </>
-      ) : (
-        <>
-          <h1 className="text-2xl font-bold mb-4">Currently playing</h1>
-          <ActiveCardSong song={activeSong} />
-        </>
-      )}
       {isMobile && <AddSong addSong={addSong} />}
       <div className="space-y-4 mt-6">
         <h1 className="text-2xl font-bold">Up Next</h1>
         {songs.length <= 1 && <div>No songs in queue</div>}
-        {songs.map(
-          (song) =>
-            !song.isActive && (
-              <SongCard
-                song={song}
-                key={song.id}
-                handleVote={handleToggleVote}
-              />
-            )
-        )}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+          {songs.map(
+            (song) =>
+              !song.isActive && (
+                <SongCard
+                  song={song}
+                  key={song.id}
+                  handleVote={handleToggleVote}
+                />
+              )
+          )}
+        </div>
       </div>
     </div>
   );
