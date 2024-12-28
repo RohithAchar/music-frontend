@@ -35,7 +35,9 @@ const Room = () => {
   useEffect(() => {
     if (!socket) {
       try {
-        const ws = new WebSocket("ws://localhost:8080");
+        const ws = new WebSocket(
+          "ws://ec2-3-109-207-5.ap-south-1.compute.amazonaws.com:8080"
+        );
         ws.onopen = () => {
           console.log("WebSocket connection established");
           setSocket(ws);
