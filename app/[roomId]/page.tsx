@@ -36,7 +36,7 @@ const Room = () => {
     if (!socket) {
       try {
         const ws = new WebSocket(
-          "ws://ec2-3-109-207-5.ap-south-1.compute.amazonaws.com:8080"
+          "ws://ec2-13-232-83-90.ap-south-1.compute.amazonaws.com:8080"
         );
         ws.onopen = () => {
           console.log("WebSocket connection established");

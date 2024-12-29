@@ -9,6 +9,7 @@ const CTA = () => {
     if (session.status === "unauthenticated") {
       await signIn();
     }
+    if (!session.data?.user.id) return;
     window.location.href = `/${session.data?.user.id}`;
   };
 
