@@ -4,8 +4,10 @@ import ActiveCardSong from "@/components/ActiveSongCard";
 import AddSongLarge from "@/components/AddSongLarge";
 import AddSong from "@/components/AddSongMobile";
 import { LoadingState } from "@/components/LoadingState";
+import { SocialShare } from "@/components/SocialShare";
 import SongCard from "@/components/SongCard";
 import ModeToggle from "@/components/ThemeToggleBtn";
+import { Button } from "@/components/ui/button";
 import YouTubePlayer from "@/components/YoutubePlayer";
 import IsMobile from "@/hooks/IsMobile";
 import { Song } from "@/types/type";
@@ -153,7 +155,10 @@ const Room = () => {
     <div className="px-6 py-10 relative h-screen w-full max-w-screen-xl mx-auto">
       <div className="w-full flex justify-between items-center">
         <p>{session.data?.user.name} room</p>
-        <ModeToggle />
+        <div className="space-x-2 flex items-center">
+          <SocialShare />
+          <ModeToggle />
+        </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3">
         <div className="col-span-2">
