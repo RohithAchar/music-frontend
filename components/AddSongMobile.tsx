@@ -17,7 +17,6 @@ import { Card, CardContent } from "./ui/card";
 import Image from "next/image";
 import { Song } from "@/types/type";
 import { createSongFromYouTube } from "@/lib/utils";
-import toast from "react-hot-toast";
 
 const AddSong = ({ addSong }: { addSong: (song: Song) => void }) => {
   const [input, setInput] = useState(""); // Stores the input YouTube link
@@ -96,7 +95,6 @@ const AddSong = ({ addSong }: { addSong: (song: Song) => void }) => {
                 setInput(""); // Reset input
                 setSong(null); // Reset song
                 setIsDrawerOpen(false); // Close the drawer
-                toast.success("Song added to queue");
               }
             }}
           >

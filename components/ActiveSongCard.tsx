@@ -16,8 +16,9 @@ const ActiveCardSong = ({ song }: { song: Song | null }) => {
       )}
     >
       <CardContent className="p-0">
-        <div className="relative">
+        <div className="relative aspect-video w-full">
           <Image
+            fill
             src={song.largeThumbnail}
             alt={song.title}
             className="w-full h-48 object-cover rounded-t-lg"

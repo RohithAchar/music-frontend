@@ -5,13 +5,14 @@ import AddSongLarge from "@/components/AddSongLarge";
 import AddSong from "@/components/AddSongMobile";
 import { LoadingState } from "@/components/LoadingState";
 import SongCard from "@/components/SongCard";
-import { ModeToggle } from "@/components/ThemeToggleBtn";
+import ModeToggle from "@/components/ThemeToggleBtn";
 import YouTubePlayer from "@/components/YoutubePlayer";
 import IsMobile from "@/hooks/IsMobile";
 import { Song } from "@/types/type";
 import { signIn, useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const Room = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -35,9 +36,8 @@ const Room = () => {
   useEffect(() => {
     if (!socket) {
       try {
-        const ws = new WebSocket(
-          "ws://ec2-13-232-83-90.ap-south-1.compute.amazonaws.com:8080"
-        );
+        const url = process.env.NEXT_PUBLIC_WS_URL as string;
+        const ws = new WebSocket(url);
         ws.onopen = () => {
           console.log("WebSocket connection established");
           setSocket(ws);
@@ -86,6 +86,8 @@ const Room = () => {
         setActiveSong(message.data);
       } else if (message.type === "song_added") {
         setSongs((prev) => [...prev, message.data]);
+      } else if (message.type === "song_already_exists") {
+        toast.error("Song already exists");
       }
     };
   }, [socket, session, roomId]);
@@ -118,6 +120,16 @@ const Room = () => {
   };
 
   const addSong = (song: Song) => {
+    // Check if the song already exists in the queue
+    const songExists = songs.some(
+      (existingSong) => existingSong.id === song.id
+    );
+    if (songExists) {
+      toast.error("Song already exists");
+      handleToggleVote(song);
+      return;
+    }
+
     socket?.send(
       JSON.stringify({
         type: "add_song",
@@ -127,6 +139,7 @@ const Room = () => {
         },
       })
     );
+    toast.success("Song added to queue");
   };
 
   const onEnd = () => {
@@ -138,8 +151,8 @@ const Room = () => {
 
   return (
     <div className="px-6 py-10 relative h-screen w-full max-w-screen-xl mx-auto">
-      <div className="w-full flex justify-between">
-        <h1>{session.data?.user.name}&apos s Room</h1>
+      <div className="w-full flex justify-between items-center">
+        <p>{session.data?.user.name} room</p>
         <ModeToggle />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3">

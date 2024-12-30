@@ -2,7 +2,7 @@
 
 import { Song } from "@/types/type";
 import { Card, CardContent } from "@/components/ui/card";
-import { ThumbsUp } from "lucide-react";
+import { Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
@@ -49,9 +49,10 @@ const SongCard = ({
               onClick={() => handleVote(song)}
               className="flex items-center gap-1.5 text-muted-foreground cursor-pointer"
             >
-              <ThumbsUp
+              <Heart
                 className="w-4 h-4"
-                fill={isVoted ? "currentColor" : "none"}
+                stroke="green"
+                fill={isVoted ? "green" : "none"}
               />
               <span className="text-sm">{song.votes.length} votes</span>
             </div>

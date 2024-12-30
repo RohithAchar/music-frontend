@@ -64,3 +64,16 @@ export const extractVideoId = (url: string): string | null => {
     return null;
   }
 };
+
+export function extractId(input: string): string | null {
+  try {
+    // Check if the input is a URL
+    const url = new URL(input);
+    // Extract the pathname and remove leading slashes
+    const id = url.pathname.replace(/^\/+/, "");
+    return id || null;
+  } catch {
+    // If input is not a valid URL, assume it's a direct ID
+    return input.match(/^\d+$/) ? input : null;
+  }
+}
