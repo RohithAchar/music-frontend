@@ -7,7 +7,6 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { Song } from "@/types/type";
 import { createSongFromYouTube } from "@/lib/utils";
-import toast from "react-hot-toast";
 
 const AddSongLarge = ({ addSong }: { addSong: (song: Song) => void }) => {
   const [input, setInput] = useState(""); // Stores the input YouTube link
