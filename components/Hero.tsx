@@ -36,8 +36,8 @@ const Hero = () => {
 
       {/* Hero Text */}
       <h1 className="text-3xl sm:text-5xl font-bold text-center py-10 z-20 relative">
-        MAKE A CHOICE,
-        <br /> HEAR THE NOISE!
+        Queue. Vote. Play. <br />
+        Together!
       </h1>
     </div>
   );

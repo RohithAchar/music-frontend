@@ -54,7 +54,7 @@ const Home = () => {
       <Features />
       <GitHubStar />
       <footer className="mt-16 text-center text-sm text-muted-foreground">
-        <p>© {new Date().getFullYear()} YourAppName. All rights reserved.</p>
+        <p>© {new Date().getFullYear()} NextQ. All rights reserved.</p>
         <p>
           Built with ❤️ by{" "}
           <a
