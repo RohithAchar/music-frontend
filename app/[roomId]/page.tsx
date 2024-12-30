@@ -7,7 +7,6 @@ import { LoadingState } from "@/components/LoadingState";
 import { SocialShare } from "@/components/SocialShare";
 import SongCard from "@/components/SongCard";
 import ModeToggle from "@/components/ThemeToggleBtn";
-import { Button } from "@/components/ui/button";
 import YouTubePlayer from "@/components/YoutubePlayer";
 import IsMobile from "@/hooks/IsMobile";
 import { Song } from "@/types/type";
