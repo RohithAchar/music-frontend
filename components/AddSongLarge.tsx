@@ -70,7 +70,6 @@ const AddSongLarge = ({ addSong }: { addSong: (song: Song) => void }) => {
             addSong(song); // Pass the song to the parent
             setInput(""); // Reset input
             setSong(null); // Reset song
-            toast.success("Song added to queue");
           }
         }}
       >
