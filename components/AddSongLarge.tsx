@@ -29,7 +29,7 @@ const AddSongLarge = ({ addSong }: { addSong: (song: Song) => void }) => {
   }, [input]);
 
   return (
-    <div className="p-4 max-w-lg mx-auto mt-8">
+    <div className="p-4 max-w-lg ml-auto mt-8">
       <h2 className="text-xl font-semibold mb-4">Add song to the queue</h2>
       <p className="mb-4">Add the YouTube link of the song below.</p>
 

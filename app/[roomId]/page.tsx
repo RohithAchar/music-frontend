@@ -7,11 +7,13 @@ import { LoadingState } from "@/components/LoadingState";
 import { SocialShare } from "@/components/SocialShare";
 import SongCard from "@/components/SongCard";
 import ModeToggle from "@/components/ThemeToggleBtn";
+import { Button } from "@/components/ui/button";
 import YouTubePlayer from "@/components/YoutubePlayer";
 import IsMobile from "@/hooks/IsMobile";
 import { Song } from "@/types/type";
+import { ChevronLeft } from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -23,6 +25,7 @@ const Room = () => {
   const session = useSession();
   const { roomId } = useParams();
   const isMobile = IsMobile();
+  const router = useRouter();
 
   useEffect(() => {
     setIsMounted(true);
@@ -40,7 +43,6 @@ const Room = () => {
         const url = process.env.NEXT_PUBLIC_WS_URL as string;
         const ws = new WebSocket(url);
         ws.onopen = () => {
-          console.log("WebSocket connection established");
           setSocket(ws);
         };
         ws.onerror = (error) => {
@@ -78,9 +80,8 @@ const Room = () => {
 
     socket.onmessage = (event) => {
       const message = JSON.parse(event.data);
-      console.log("message", message);
       if (message.type === "room_created") {
-        console.log("room_created");
+        toast.success("Room created");
       } else if (message.type === "song_updated") {
         setSongs(message.data);
       } else if (message.type === "active_song") {
@@ -89,6 +90,9 @@ const Room = () => {
         setSongs((prev) => [...prev, message.data]);
       } else if (message.type === "song_already_exists") {
         toast.error("Song already exists");
+      } else if (message.type === "room_not_found") {
+        toast.error("Room does not exist");
+        router.push("/");
       }
     };
   }, [socket, session, roomId]);
@@ -153,7 +157,10 @@ const Room = () => {
   return (
     <div className="px-6 py-10 relative h-screen w-full max-w-screen-xl mx-auto">
       <div className="w-full flex justify-between items-center">
-        <p>{session.data?.user.name} room</p>
+        {/* Create a minimal back button */}
+        <Button variant={"outline"} onClick={() => router.back()}>
+          <ChevronLeft />
+        </Button>
         <div className="space-x-2 flex items-center">
           <SocialShare />
           <ModeToggle />
@@ -164,7 +171,11 @@ const Room = () => {
           {roomId === session.data?.user.id ? (
             <div>
               <h1 className="text-2xl font-bold mb-4">Currently playing</h1>
-              {!activeSong?.id && <div>No song is playing</div>}
+              {!activeSong?.id && (
+                <div className="aspect-video bg-primary-foreground rounded-xl flex justify-center items-center">
+                  No song is playing
+                </div>
+              )}
               <YouTubePlayer songId={activeSong?.id} onEnd={onEnd} />
             </div>
           ) : (
